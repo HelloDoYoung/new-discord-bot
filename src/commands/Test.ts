@@ -23,7 +23,8 @@ export default class Test extends Command {
                     description: 'Option two',
                     type: ApplicationCommandOptionType.Subcommand
                 }
-            ]
+            ],
+            dev: true
         });
     }
 }
