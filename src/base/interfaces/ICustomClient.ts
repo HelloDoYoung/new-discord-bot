@@ -6,7 +6,7 @@ import SubCommand from "../classes/SubCommand";
 export default interface ICustomClient {
     config: IConfig;
     commands: Collection<string, Command>;
-    SubCommands: Collection<string, SubCommand>;
+    subCommands: Collection<string, SubCommand>;
     cooldowns: Collection<string, Collection<string, number>>;
 
     Init(): void;

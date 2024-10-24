@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
+import { Application, ApplicationCommandOptionType, ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
 import Category from "../base/enums/Category";
 import CustomClient from "../base/classes/CustomClient";
 import Command from "../base/classes/Command";
@@ -10,13 +10,20 @@ export default class Test extends Command {
             description: 'Test command',
             category: Category.Utilities,
             default_member_permission: PermissionsBitField.Flags.UseApplicationCommands,
-            dm_permission: false,
+            dm_permission: true,
             cooldown: 0,
-            options: []
+            options: [
+                {
+                    name: 'one',
+                    description: 'Option one',
+                    type: ApplicationCommandOptionType.Subcommand
+                },
+                {
+                    name: 'two',
+                    description: 'Option two',
+                    type: ApplicationCommandOptionType.Subcommand
+                }
+            ]
         });
-    }
-
-    Execute(interaction: ChatInputCommandInteraction) {
-        interaction.reply({ content: 'Test command executed', ephemeral: true });
     }
 }
