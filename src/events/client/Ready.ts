@@ -22,9 +22,7 @@ export default class Ready extends Event {
         const setCommands: any = await rest.put(Routes.applicationGuildCommands(this.client.config.discordClientId, this.client.config.guildId), {
             body: commands 
         });
-
-        console.log(setCommands)
-
+        
         console.log(`Successfully registered ${setCommands.length} commands!`);
     }
 

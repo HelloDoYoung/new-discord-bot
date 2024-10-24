@@ -25,9 +25,7 @@ export default class Command implements ICommand {
         this.cooldown = options.cooldown;
     }
     Execute(interaction: ChatInputCommandInteraction): void {
-        throw new Error("Method not implemented.");
     }
     AutoComplete(interaction: AutocompleteInteraction): void {
-        throw new Error("Method not implemented.");
     }
 }
