@@ -5,4 +5,6 @@ export default interface IConfig {
     devToken: string;
     devDiscordClientId: string;
     devGuildId: string;
+
+    developerUserIds: string[];
 }

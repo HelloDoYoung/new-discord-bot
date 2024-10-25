@@ -18,8 +18,16 @@ export default class CommandHandler extends Event {
         const command: Command = this.client.commands.get(interaction.commandName)!;
 
         // @ts-ignore
-        if (!command) return interaction.reply({ content: '해당 명령어는 존재하지 않습니다.', ephemeral: true }) && this.client.commands.delete(interaction.commandName);
+        if (!command) return interaction.reply({ embeds: [new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(`❌ 해당 명령어는 존재하지 않습니다.`)
+        ], ephemeral: true }) && this.client.commands.delete(interaction.commandName);
 
+        if (command.dev && !this.client.config.developerUserIds.includes(interaction.user.id))
+            return interaction.reply({ embeds: [new EmbedBuilder()
+                .setColor("Red")
+                .setDescription(`❌ 개발 중인 명령어로 사용하실 수 없습니다.`)
+            ], ephemeral: true });
         const { cooldowns } = this.client;
         if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Collection());
 
