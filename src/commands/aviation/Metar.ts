@@ -6,16 +6,16 @@ import ms from 'ms';
 import os from 'os';
 const { version, dependencies } = require('../../../package.json');
 
-export default class Botinfo extends Command {
+export default class Metar extends Command {
     constructor(client: CustomClient) {
         super(client, {
-            name: 'botinfo',
-            description: 'Test command',
+            name: 'metar',
+            description: 'show metar information',
             category: Category.Utilities,
             default_member_permission: PermissionsBitField.Flags.UseApplicationCommands,
             options: [],
             cooldown: 0,
-            dev: false,
+            dev: true,
             dm_permission: true
         });
     }
@@ -47,7 +47,7 @@ export default class Botinfo extends Command {
                     > **Creator/Owner : ** \`DoYoung Kim\`
                     > **Developer : ** \`DoYoung Kim\`
                 `)
-            ], ephemeral: false,
+            ], ephemeral: true,
             components: [new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                     .setLabel("Invite me!")
