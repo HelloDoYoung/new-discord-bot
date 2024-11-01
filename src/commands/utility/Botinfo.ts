@@ -8,7 +8,6 @@ const { version, dependencies } = require('../../../package.json');
 
 export default class Botinfo extends Command {
     constructor(client: CustomClient) {
-        const description = 'Get information about the bot';
         super(client, {
             name: 'botinfo',
             category: Category.Utilities,
@@ -16,7 +15,7 @@ export default class Botinfo extends Command {
             options: [],
             cooldown: 0,
             dev: false,
-            description: description + (true ? ' [Development Command]' : ''),
+            description: 'Get information about the bot',
             dm_permission: true
         });
     }

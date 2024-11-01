@@ -4,10 +4,10 @@ import Command from "../../base/classes/Command";
 import Category from "../../base/enums/Category";
 import CustomClient from "../../base/classes/CustomClient";
 
-export default class Metar extends Command {
+export default class Taf extends Command {
     constructor(client: CustomClient) {
         super(client, {
-            name: 'metar',
+            name: 'taf',
             category: Category.Utilities,
             default_member_permission: PermissionsBitField.Flags.UseApplicationCommands,
             options: [
@@ -20,7 +20,7 @@ export default class Metar extends Command {
             ],
             cooldown: 0,
             dev: false,
-            description: 'Get the METAR for a specific airport',
+            description: 'Get the TAF for a specific airport',
             dm_permission: true
         });
     }

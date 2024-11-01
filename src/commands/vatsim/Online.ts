@@ -6,7 +6,6 @@ import CustomClient from "../../base/classes/CustomClient";
 
 export default class Emit extends Command {
     constructor(client: CustomClient) {
-        const description = 'daddd';
         super(client, {
             name: 'online',
             category: Category.Utilities,
@@ -14,7 +13,7 @@ export default class Emit extends Command {
             options: [],
             cooldown: 0,
             dev: true,
-            description: description + (true ? ' [Development Command]' : ''),
+            description: 'Test Command for VATSIM API',
             dm_permission: true
         });
     }
