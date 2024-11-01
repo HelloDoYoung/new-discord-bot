@@ -46,7 +46,7 @@ export default class Metar extends Command {
             interaction.reply({ embeds: [new EmbedBuilder()
                 .setColor("Green")
                 .setTitle(`**METAR - ${icao}**`)
-                .addFields({ name: '**[Raw Text]**', value: `\`\`\`${data.raw}\`\`\`` })
+                .addFields({ name: '📰 **Raw Text**', value: `\`\`\`${data.raw}\`\`\`` })
                 .addFields({ name: '🗺️ **Airport**', value: `\`\`${data.info.name}\`\``, inline: false })
                 .addFields({ name: '⏰ **Observed Time**', value: `\`\`${data.time.repr}\`\` (<t:${unix_timestamp}:R>)`, inline: true })
                 .addFields({ name: '🌬️ **Wind**', value: `\`\`${data.wind_direction.repr} at ${data.wind_speed.repr}${data.units.wind_speed}${wind_variable}${wind_gust_speed}\`\``, inline: true })
