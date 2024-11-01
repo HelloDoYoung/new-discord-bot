@@ -1,11 +1,14 @@
+require('dotenv').config();
+
 export class AvwxService {
     private readonly token: string;
 
     constructor() {
-        this.token = require('../../../data/config.json').avwx_token;
-        if (!this.token) {
+        const token = process.env.avwx_token;
+        if (!token) {
             throw new Error('avwx_token is not defined in environment variables');
         }
+        this.token = token;
     }
 
     async fetchMetar(icao: string, options: string[] = []): Promise<any> {
