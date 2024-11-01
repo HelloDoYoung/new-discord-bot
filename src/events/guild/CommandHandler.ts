@@ -37,8 +37,8 @@ export default class CommandHandler extends Event {
 
         if (timestamps.has(interaction.user.id) && (now < (timestamps.get(interaction.user.id) || 0) + cooldownAmount))
             return interaction.reply({ embeds: [new EmbedBuilder()
-                .setColor("Red")
-                .setDescription(`❌ Please wait another \`${((((timestamps.get(interaction.user.id) || 0) + cooldownAmount) - now) / 1000).toFixed(1)}\` seconds before reusing the \`${command.name}\` command`)
+            .setColor("Red")
+            .setDescription(`❌ \`${command.name}\` 명령어를 다시 사용하기 위해서 \`${((((timestamps.get(interaction.user.id) || 0) + cooldownAmount) - now) / 1000).toFixed(1)}\`초를 기다려주세요.`)
             ], ephemeral: true });
 
         timestamps.set(interaction.user.id, now);

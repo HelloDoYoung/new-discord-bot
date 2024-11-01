@@ -4,7 +4,7 @@ export class AvwxService {
     private readonly token: string;
 
     constructor() {
-        const token = process.env.avwx_token;
+        const token = process.env.AVWX_TOKEN;
         if (!token) {
             throw new Error('avwx_token is not defined in environment variables');
         }

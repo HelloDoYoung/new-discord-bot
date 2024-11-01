@@ -8,14 +8,13 @@ export default class Emit extends Command {
     constructor(client: CustomClient) {
         super(client, {
             name: 'metar',
-            description: 'call the metar data',
-            dev: true,
-            default_member_permission: PermissionsBitField.Flags.Administrator,
-            dm_permission: false,
-            category: Category.Developer,
+            description: 'search metar data',
+            category: Category.Utilities,
+            default_member_permission: PermissionsBitField.Flags.UseApplicationCommands,
+            options: [],
             cooldown: 0,
-            options: [
-            ]
+            dev: false,
+            dm_permission: true
         });
     }
 

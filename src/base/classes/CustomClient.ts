@@ -1,10 +1,11 @@
+require('dotenv').config();
+
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import ICustomClient from '../interfaces/ICustomClient';
 import IConfig from '../interfaces/IConfig';
 import Handler from './Handler';
 import Command from './Command';
 import SubCommand from './SubCommand';
-import { connect } from "mongoose";
 
 export default class CustomClient extends Client implements ICustomClient 
 {
@@ -19,24 +20,26 @@ export default class CustomClient extends Client implements ICustomClient
     {
         super({ intents: [GatewayIntentBits.Guilds] })
 
-        this.config = require('../../../data/config.json');
+        this.config = {
+            token: process.env.TOKEN || '',
+            discordClientId: process.env.DISCORD_CLIENT_ID || '',
+            devToken: process.env.DEV_TOKEN || '',
+            devDiscordClientId: process.env.DEV_DISCORD_CLIENT_ID || '',
+            devGuildId: process.env.DEV_GUILD_ID || '',
+            developerUserIds: process.env.DEVELOPER_USER_IDS?.split(',') || []
+        };
         this.handler = new Handler(this);
         this.commands = new Collection();
         this.subCommands = new Collection();
         this.cooldowns = new Collection();
         this.developmentMode = (process.argv.slice(2).includes('--development'));
     }
-
     Init(): void {
         console.log(`Starting the bot in ${this.developmentMode ? 'development' : 'production'} mode.`);
         this.LoadHandlers();
         
         this.login(this.developmentMode ? this.config.devToken : this.config.token)
             .catch((err) => console.log(err));
-
-        connect(this.developmentMode ? this.config.devMongoUrl : this.config.mongoUrl)
-            .then(() => console.log('Connected to MongoDB.'))
-            .catch((err) => console.error(err));
     }
 
     LoadHandlers(): void {
