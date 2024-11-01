@@ -14,46 +14,29 @@ export class AvwxService {
     async fetchMetar(icao: string, options: string[] = []): Promise<any> {
         const optionsParam = options.length > 0 ? `?options=${options.join(',')}` : '';
         const url = `https://avwx.rest/api/metar/${icao}${optionsParam}`;
-        
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Authorization': this.token
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': this.token
             }
-            
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching METAR:', error);
-            throw error;
-        }
+        });
+        
+        return await response.json();
+        
     }
 
     async fetchTaf(icao: string, options: string[] = []): Promise<any> {
         const optionsParam = options.length > 0 ? `?options=${options.join(',')}` : '';
         const url = `https://avwx.rest/api/taf/${icao}${optionsParam}`;
         
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Authorization': this.token
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': this.token
             }
-            
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching METAR:', error);
-            throw error;
-        }
+        });
+
+        return await response.json();
     }
 }

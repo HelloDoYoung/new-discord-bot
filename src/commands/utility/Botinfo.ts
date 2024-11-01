@@ -8,14 +8,15 @@ const { version, dependencies } = require('../../../package.json');
 
 export default class Botinfo extends Command {
     constructor(client: CustomClient) {
+        const description = 'Get information about the bot';
         super(client, {
             name: 'botinfo',
-            description: 'Test command',
             category: Category.Utilities,
             default_member_permission: PermissionsBitField.Flags.UseApplicationCommands,
             options: [],
             cooldown: 0,
             dev: false,
+            description: description + (true ? ' [Development Command]' : ''),
             dm_permission: true
         });
     }
@@ -23,8 +24,8 @@ export default class Botinfo extends Command {
     async Execute(interaction: ChatInputCommandInteraction) {
         interaction.reply({ 
             embeds: [new EmbedBuilder()
-                .setThumbnail(this.client.user?.displayAvatarURL()!)
                 .setColor("Green")
+                .setThumbnail(this.client.user?.displayAvatarURL()!)
                 .setDescription(`
                     **Bot Info**
                     > **User : ** \`${this.client.user?.tag}\`

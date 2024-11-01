@@ -1,21 +1,22 @@
 // Code referenced from https://vatsim.dev/api/core-api
-export class VatsimCoreService_ATC {
-    async fetchAtc(options: string): Promise<any> {
+export class VatsimCoreService {
+    async fetchVatsimCore_Community(discord_id:string, options: string): Promise<any> {
+        const url = `https://api.vatsim.net/v2/members/${options}/${discord_id}`;
+
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+        
+        return await response.json();
+    }
+
+    async fetchVatsimCore_Atc(options: string): Promise<any> {
         const url = `https://api.vatsim.net/v2/atc/${options}`;
         
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            throw error;
-        }
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+        
+        return await response.json();
     }
 }
