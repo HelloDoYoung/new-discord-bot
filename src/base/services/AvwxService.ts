@@ -23,7 +23,6 @@ export class AvwxService {
         });
         
         return await response.json();
-        
     }
 
     async fetchTaf(icao: string, options: string[] = []): Promise<any> {

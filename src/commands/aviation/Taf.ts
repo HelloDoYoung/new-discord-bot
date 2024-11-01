@@ -26,44 +26,44 @@ export default class Taf extends Command {
     }
 
     async Execute(interaction: ChatInputCommandInteraction) {
-        const avwxService = new AvwxService();
         const icao = interaction.options.getString('icao')?.toUpperCase() || '';
-        const data = await avwxService.fetchMetar(icao, ['info', 'translate']);
-        
-        if (!data.error) {
-            const unix_timestamp = Math.floor(new Date(data.time.dt).getTime() / 1000);
 
-            let wind_variable = '';
-            if (data.wind_variable_direction?.length >= 2) {
-                wind_variable = ` Variable between ${data.wind_variable_direction[0].repr} and ${data.wind_variable_direction[1].repr}`;
-            }
-            let wind_gust_speed = '';
-            if (data.wind_gust == null ) {
-            } else {
-                wind_gust_speed = ` Gust ${data.wind_gust.repr}${data.units.wind_speed}`;
-            }
+        const avwxService = new AvwxService();
+        const data = await avwxService.fetchTaf(icao, ['info', 'translate']);
+
+        if (!data || !data.forecast || !data.time || !data.station) {
+            return interaction.reply({ embeds: [new EmbedBuilder()
+                .setColor("Red")
+                .setDescription(`❌ Error fetching TAF for ${icao}`)
+            ], ephemeral: true });
+        }
+
+        let forecastMessages = [];
+        let forecastArray = [...data.forecast];
+        let firstForecast = forecastArray.shift();
+        let firstForecastRaw = firstForecast?.raw || '';
+        let reportTime = data.time.repr;
+        let stationCode = data.station;
+
+        for(let i = 0; i < forecastArray.length; i++){
+            const currentForecast = forecastArray[i].raw;
+            const formattedForecast = currentForecast;
+            forecastMessages.push([formattedForecast]);
+        }
+
+        let finalOutput = `TAF ${stationCode} ${reportTime} ${firstForecastRaw}`;
+        for(let j = 0; j < forecastMessages.length; j++){
+            finalOutput += `\n${forecastMessages[j]}`;
+        }
+
+        if (!data.error) {
             interaction.reply({ embeds: [new EmbedBuilder()
                 .setColor("Green")
-                .setTitle(`**METAR - ${icao}**`)
-                .addFields({ name: '📰 **Raw Text**', value: `\`\`\`${data.raw}\`\`\`` })
-                .addFields({ name: '🗺️ **Airport**', value: `\`\`${data.info.name}\`\``, inline: false })
-                .addFields({ name: '⏰ **Observed Time**', value: `\`\`${data.time.repr}\`\` (<t:${unix_timestamp}:R>)`, inline: true })
-                .addFields({ name: '🌬️ **Wind**', value: `\`\`${data.wind_direction.repr} at ${data.wind_speed.repr}${data.units.wind_speed}${wind_variable}${wind_gust_speed}\`\``, inline: true })
-                .addFields({ name: '🛰️ **Visibility**', value: `\`\`${data.translate.visibility}\`\``, inline: true })
-                .addFields({ name: '🌡️ **Temperature**', value: `\`\`${data.translate.temperature}\`\``, inline: true })
-                .addFields({ name: '💧 **Dew Point**', value: `\`\`${data.translate.dewpoint}\`\``, inline: true })
-                .addFields({ name: '🌐 **Altimeter**', value: `\`\`${data.translate.altimeter}\`\``, inline: true })
-                .addFields({ name: '☁️ **Clouds**', value: `\`\`${data.translate.clouds}\`\``, inline: false })
-                .addFields({ name: '✅ **Flight Rule**', value: `\`\`${data.flight_rules}\`\``, inline: true })
+                .setTitle(`**TAF - ${icao}**`)
+                .addFields({ name: '📰 **Raw Text**', value: `\`\`\`${finalOutput}\`\`\`` })
                 .setFooter({ text: `${interaction.user.username} • VIA AVWX API`, })
                 .setTimestamp()
             ], ephemeral: false });
-            
-        } else {
-            interaction.reply({ embeds: [new EmbedBuilder()
-                .setColor("Red")
-                .setDescription(`❌ Error fetching METAR for ${icao}`)
-            ], ephemeral: true });
         }
     }
 }

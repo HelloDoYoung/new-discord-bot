@@ -16,6 +16,12 @@ export default class Metar extends Command {
                     description: 'ICAO code of the airport',
                     type: ApplicationCommandOptionType.String,
                     required: true
+                },
+                {
+                    name: 'raw-only',
+                    description: 'Get the raw METAR text only',
+                    type: ApplicationCommandOptionType.Boolean,
+                    required: false
                 }
             ],
             cooldown: 0,
@@ -26,8 +32,10 @@ export default class Metar extends Command {
     }
 
     async Execute(interaction: ChatInputCommandInteraction) {
-        const avwxService = new AvwxService();
         const icao = interaction.options.getString('icao')?.toUpperCase() || '';
+        const raw_only = interaction.options.getBoolean('raw-only') || false;
+
+        const avwxService = new AvwxService();
         const data = await avwxService.fetchMetar(icao, ['info', 'translate']);
         
         if (!data.error) {
@@ -42,23 +50,32 @@ export default class Metar extends Command {
             } else {
                 wind_gust_speed = ` Gust ${data.wind_gust.repr}${data.units.wind_speed}`;
             }
-            interaction.reply({ embeds: [new EmbedBuilder()
-                .setColor("Green")
-                .setTitle(`**METAR - ${icao}**`)
-                .addFields({ name: '📰 **Raw Text**', value: `\`\`\`${data.raw}\`\`\`` })
-                .addFields({ name: '🗺️ **Airport**', value: `\`\`${data.info.name}\`\``, inline: false })
-                .addFields({ name: '⏰ **Observed Time**', value: `\`\`${data.time.repr}\`\` (<t:${unix_timestamp}:R>)`, inline: true })
-                .addFields({ name: '🌬️ **Wind**', value: `\`\`${data.wind_direction.repr} at ${data.wind_speed.repr}${data.units.wind_speed}${wind_variable}${wind_gust_speed}\`\``, inline: true })
-                .addFields({ name: '🛰️ **Visibility**', value: `\`\`${data.translate.visibility}\`\``, inline: true })
-                .addFields({ name: '🌡️ **Temperature**', value: `\`\`${data.translate.temperature}\`\``, inline: true })
-                .addFields({ name: '💧 **Dew Point**', value: `\`\`${data.translate.dewpoint}\`\``, inline: true })
-                .addFields({ name: '🌐 **Altimeter**', value: `\`\`${data.translate.altimeter}\`\``, inline: true })
-                .addFields({ name: '☁️ **Clouds**', value: `\`\`${data.translate.clouds}\`\``, inline: false })
-                .addFields({ name: '✅ **Flight Rule**', value: `\`\`${data.flight_rules}\`\``, inline: true })
-                .setFooter({ text: `${interaction.user.username} • VIA AVWX API`, })
-                .setTimestamp()
-            ], ephemeral: false });
-            
+            if (raw_only) {
+                interaction.reply({ embeds: [new EmbedBuilder()
+                    .setColor("Green")
+                    .setTitle(`**METAR - ${icao}**`)
+                    .addFields({ name: '📰 **Raw Text**', value: `\`\`\`${data.raw}\`\`\`` })
+                    .setFooter({ text: `${interaction.user.username} • VIA AVWX API`, })
+                    .setTimestamp()
+                ], ephemeral: false });
+            } else {
+                interaction.reply({ embeds: [new EmbedBuilder()
+                    .setColor("Green")
+                    .setTitle(`**METAR - ${icao}**`)
+                    .addFields({ name: '📰 **Raw Text**', value: `\`\`\`${data.raw}\`\`\`` })
+                    .addFields({ name: '🗺️ **Airport**', value: `\`\`${data.info.name}\`\``, inline: false })
+                    .addFields({ name: '⏰ **Observed Time**', value: `\`\`${data.time.repr}\`\` (<t:${unix_timestamp}:R>)`, inline: true })
+                    .addFields({ name: '🌬️ **Wind**', value: `\`\`${data.wind_direction.repr} at ${data.wind_speed.repr}${data.units.wind_speed}${wind_variable}${wind_gust_speed}\`\``, inline: true })
+                    .addFields({ name: '🛰️ **Visibility**', value: `\`\`${data.translate.visibility}\`\``, inline: true })
+                    .addFields({ name: '🌡️ **Temperature**', value: `\`\`${data.translate.temperature}\`\``, inline: true })
+                    .addFields({ name: '💧 **Dew Point**', value: `\`\`${data.translate.dewpoint}\`\``, inline: true })
+                    .addFields({ name: '🌐 **Altimeter**', value: `\`\`${data.translate.altimeter}\`\``, inline: true })
+                    .addFields({ name: '☁️ **Clouds**', value: `\`\`${data.translate.clouds}\`\``, inline: false })
+                    .addFields({ name: '✅ **Flight Rule**', value: `\`\`${data.flight_rules}\`\``, inline: true })
+                    .setFooter({ text: `${interaction.user.username} • VIA AVWX API`, })
+                    .setTimestamp()
+                ], ephemeral: false });
+            }
         } else {
             interaction.reply({ embeds: [new EmbedBuilder()
                 .setColor("Red")
