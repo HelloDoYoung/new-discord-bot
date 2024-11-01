@@ -1,4 +1,4 @@
-import { Application, ApplicationCommandOptionType, ChatInputCommandInteraction, Client, EmbedBuilder, Events, Guild, Message, PermissionsBitField } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, EmbedBuilder, PermissionsBitField } from "discord.js";
 import { AvwxService } from "../../base/services/AvwxService";
 import Command from "../../base/classes/Command";
 import Category from "../../base/enums/Category";
@@ -20,7 +20,7 @@ export default class Metar extends Command {
                 }
             ],
             cooldown: 0,
-            dev: true,
+            dev: false,
             description: description + (true ? ' [Development Command]' : ''),
             dm_permission: true
         });
